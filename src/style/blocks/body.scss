@@ -1,0 +1,10 @@
+.body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: rgb(172, 171, 174);
+}
+
+.body__main {
+    flex: 1;
+}
