@@ -23,15 +23,12 @@ export class ViewAlive {
   getSize() {
     return this.sizeInput.value;
   }
-
   getAmount() {
     return this.amountInput.value;
   }
-
   renderSize(size) {
     this.sizeSpan.textContent = size;
   }
-
   renderAmount(amount) {
     this.amountSpan.textContent = amount;
   }
