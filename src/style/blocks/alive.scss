@@ -1,0 +1,17 @@
+.alive__list {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 0 auto;
+    background-color: white;
+    box-sizing: border-box;
+}
+
+.alive__item {
+    width: 20px;
+    height: 20px;
+    background-color: transparent;
+    border: 1px solid gray;
+    box-sizing: border-box;
+    cursor: pointer;
+}

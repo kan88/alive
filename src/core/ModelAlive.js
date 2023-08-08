@@ -1,6 +1,8 @@
 export class ModelAlive {
-  #size;
-  #amount;
+  #size = 50;
+  #amount = 0;
+  #maxWidth = 500;
+  #maxAmount = 100;
 
   getSize() {
     return this.#size;
@@ -8,6 +10,22 @@ export class ModelAlive {
 
   setSize(size) {
     this.#size = size;
+  }
+
+  getMaxWidth() {
+    return this.#maxWidth;
+  }
+
+  setMaxWidth(width) {
+    this.#maxWidth = width;
+  }
+
+  getMaxAmount() {
+    return this.#maxAmount;
+  }
+
+  setMaxAmount(amount) {
+    this.#maxAmount = amount;
   }
 
   getAmount() {
