@@ -1,4 +1,5 @@
-import { mathRandom } from "../utils/math-random";
+import { mathRandomWithMin } from "../utils/math";
+import { MAX } from "../utils/consts";
 
 export class ControllerAlive {
   constructor(model, view) {
@@ -8,7 +9,7 @@ export class ControllerAlive {
   }
 
   changeRandom() {
-    this.model.setAmount(mathRandom(this.model.getSize() / 2));
+    this.model.setAmount(mathRandomWithMin(this.model.getSize() * MAX));
     this.view.renderAmount(this.model.getAmount());
     this.view.renderAmountInput(this.model.getAmount());
   }
@@ -16,17 +17,31 @@ export class ControllerAlive {
   changeSize(size) {
     this.model.setSize(size);
     this.view.renderSize(size);
-    this.model.setMaxAmount(size * 2);
-    this.view.changeMaxAmount(size * 2);
+    this.model.setMaxAmount(size * 20);
+    this.view.changeMaxAmount(size * 20);
     if (this.model.getAmount() > this.model.getMaxAmount()) {
-      this.changeAmount(size * 2);
+      this.changeAmount(size * 20);
     }
+    this.view.rerenderList(
+      this.model.getSize() * this.model.getSize(),
+      (flag) => this.incrementDecrement(flag)
+    );
   }
 
   changeAmount(amount) {
     this.model.setAmount(amount);
-    this.view.renderAmount(amount);
-    this.view.renderAmountInput(amount);
+    this.view.renderAmount(this.model.getAmount());
+    this.view.renderAmountInput(this.model.getAmount());
+  }
+
+  getAmount() {
+    return this.model.getAmount();
+  }
+
+  incrementDecrement(flag) {
+    flag
+      ? this.changeAmount(1 + this.model.getAmount())
+      : this.changeAmount(this.model.getAmount() - 1);
   }
 
   init() {
@@ -35,6 +50,8 @@ export class ControllerAlive {
     this.view.renderAmountInput(this.model.getAmount());
     this.view.renderAmount(this.model.getAmount());
     this.view.changeMaxAmount(this.model.getMaxAmount());
-    this.view.renderList(this.model.getMaxAmount());
+    this.view.renderList(this.model.getSize() * this.model.getSize(), (flag) =>
+      this.incrementDecrement(flag)
+    );
   }
 }

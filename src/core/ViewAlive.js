@@ -1,4 +1,6 @@
-import { factory } from "../utils/fabric-item";
+import { factory } from "../utils/Factory";
+import { mathRandom } from "../utils/math";
+import { debounce } from "../utils/debounce";
 
 export class ViewAlive {
   form = document.querySelector(".form");
@@ -20,20 +22,38 @@ export class ViewAlive {
   }
 
   sizeHandler() {
-    this.sizeInput.addEventListener("input", (evt) =>
-      this.controller.changeSize(evt.target.value)
+    this.sizeInput.addEventListener(
+      "input",
+      debounce((evt) => {
+        this.clearLiveList();
+        this.controller.changeAmount(0);
+        this.controller.changeSize(+evt.target.value);
+      }, 300)
     );
   }
 
   randomHandler() {
-    this.randomButton.addEventListener("click", () =>
-      this.controller.changeRandom()
-    );
+    this.randomButton.addEventListener("click", () => {
+      this.controller.changeRandom();
+      this.clearLiveList();
+      this.renderOneAlive(true, this.controller.getAmount());
+    });
   }
 
   amountHandler() {
-    this.amountInput.addEventListener("input", (evt) =>
-      this.controller.changeAmount(evt.target.value)
+    this.amountInput.addEventListener(
+      "input",
+      debounce((evt) => {
+        if (+evt.target.value > this.controller.getAmount()) {
+          const count = +evt.target.value - this.controller.getAmount();
+          this.renderOneAlive(true, count);
+        } else {
+          const count = this.controller.getAmount() - +evt.target.value;
+          this.renderOneAlive(false, count);
+        }
+
+        this.controller.changeAmount(+evt.target.value);
+      }, 300)
     );
   }
 
@@ -43,9 +63,8 @@ export class ViewAlive {
 
   renderSize(size) {
     this.sizeSpan.textContent = size;
-    size > 50
-      ? (this.aliveList.style.maxWidth = `300px`)
-      : (this.aliveList.style.maxWidth = `30px`);
+    this.aliveList.style.width = `${size * 10}px`;
+    this.aliveList.style.height = `${size * 10}px`;
   }
 
   renderAmount(amount) {
@@ -60,9 +79,54 @@ export class ViewAlive {
     this.sizeInput.value = value;
   }
 
-  renderList(count) {
+  renderList(count, cb) {
     for (let i = 0; i < count; i++) {
-      this.aliveList.appendChild(factory.renderOne(i));
+      this.aliveList.appendChild(factory.renderOne(i, cb));
+    }
+  }
+
+  rerenderList(count, cb) {
+    if (count > this.aliveList.childNodes.length) {
+      const amount = count - (this.aliveList.childNodes.length - 1);
+      for (let i = 0; i < amount; i++) {
+        this.aliveList.appendChild(
+          factory.renderOne(this.aliveList.childNodes.length, cb)
+        );
+      }
+    } else {
+      while (this.aliveList.childNodes.length > count) {
+        this.aliveList.removeChild(this.aliveList.firstChild);
+      }
+    }
+  }
+
+  clearLiveList() {
+    [...this.aliveList.querySelectorAll(".alive__item--live")].map((item) =>
+      item.classList.remove("alive__item--live")
+    );
+  }
+
+  renderOneAlive(flag, count) {
+    if (flag) {
+      for (let i = 0; i < count; i++) {
+        this.aliveList
+          .querySelectorAll(":not(.alive__item--live)")
+          [
+            mathRandom(
+              this.aliveList.querySelectorAll(":not(.alive__item--live)").length
+            )
+          ].classList.add("alive__item--live");
+      }
+    } else {
+      for (let i = 0; i < count; i++) {
+        const index = mathRandom(
+          document.querySelectorAll(".alive__item--live").length
+        );
+
+        this.aliveList
+          .querySelectorAll(".alive__item--live")
+          [index].classList.remove("alive__item--live");
+      }
     }
   }
 }

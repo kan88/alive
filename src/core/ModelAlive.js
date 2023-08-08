@@ -2,7 +2,7 @@ export class ModelAlive {
   #size = 50;
   #amount = 0;
   #maxWidth = 500;
-  #maxAmount = 100;
+  #maxAmount = 1000;
 
   getSize() {
     return this.#size;
@@ -33,6 +33,8 @@ export class ModelAlive {
   }
 
   setAmount(amount) {
-    this.#amount = amount;
+    if (amount <= this.#maxAmount) {
+      this.#amount = amount;
+    }
   }
 }
