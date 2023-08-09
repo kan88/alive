@@ -3,11 +3,14 @@
     padding: 20px 30px;
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
+    width: 100%;
 }
 
 .footer__list {
     display: flex;
     flex-wrap: wrap;
+    margin: 0 auto;
 }
 
 .footer__link {
@@ -27,6 +30,8 @@
     width: 170px;
     display: flex;
     justify-content: space-between;
+    margin: 0 auto;
+    margin-bottom: 10px;
 }
 
 .footer__button {

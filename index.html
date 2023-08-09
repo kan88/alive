@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Webpack App</title>
 </head>
 
@@ -50,7 +51,12 @@
             </ul>
         </section>
     </main>
-    <footer class="footer">
+    <footer class="footer body__footer">
+        <div class="footer__buttons">
+            <button type="button" class="footer__button footer__button--play" title="play"></button>
+            <button type="button" class="footer__button footer__button--random" title="random"></button>
+            <button type="button" class="footer__button footer__button--reload" title="reload"></button>
+        </div>
         <ul class="footer__list">
             <li class="footer__item">
                 <a href="http://t.me/kan_1988" class="footer__link footer__link--telegramm">@kan_1988</a>
@@ -62,11 +68,7 @@
                 <a href="tel:" class="footer__link footer__link--mobile">call</a>
             </li>
         </ul>
-        <div class="footer__buttons">
-            <button type="button" class="footer__button footer__button--play" title="play"></button>
-            <button type="button" class="footer__button footer__button--random" title="random"></button>
-            <button type="button" class="footer__button footer__button--reload" title="reload"></button>
-        </div>
+
     </footer>
 
 </body>
