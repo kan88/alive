@@ -14,6 +14,14 @@ export class ControllerAlive {
     this.view.renderAmountInput(this.model.getAmount());
   }
 
+  getSize() {
+    return this.model.getSize();
+  }
+
+  setMaxAmount() {
+    this.model.setMaxAmount(this.model.getSize() * this.model.getSize());
+  }
+
   changeSize(size) {
     this.model.setSize(size);
     this.view.renderSize(size);
@@ -29,7 +37,7 @@ export class ControllerAlive {
   }
 
   changeAmount(amount) {
-    this.model.setAmount(amount);
+    this.model.setAmount(amount, true);
     this.view.renderAmount(this.model.getAmount());
     this.view.renderAmountInput(this.model.getAmount());
   }
@@ -38,10 +46,14 @@ export class ControllerAlive {
     return this.model.getAmount();
   }
 
-  incrementDecrement(flag) {
-    flag
-      ? this.changeAmount(1 + this.model.getAmount())
-      : this.changeAmount(this.model.getAmount() - 1);
+  incrementDecrement(evt) {
+    if (evt.target.classList.contains("alive__item--live")) {
+      this.changeAmount(this.model.getAmount() - 1);
+      evt.target.classList.remove("alive__item--live");
+    } else if (this.model.getAmount() < this.model.getMaxAmount()) {
+      this.changeAmount(1 + this.model.getAmount());
+      evt.target.classList.add("alive__item--live");
+    }
   }
 
   init() {

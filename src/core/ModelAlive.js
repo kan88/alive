@@ -32,7 +32,7 @@ export class ModelAlive {
     return this.#amount;
   }
 
-  setAmount(amount) {
+  setAmount(amount, arg = false) {
     if (amount <= this.#maxAmount) {
       this.#amount = amount;
     }
