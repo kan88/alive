@@ -43,6 +43,22 @@ export class ViewAlive {
     this.controller.setMaxAmount();
     const length = size * size;
 
+    const dieAlive = (indexes, id) => {
+      let count = 0;
+      indexes.map((index) => {
+        liveArr.some((item) => item.dataset.id == index) ? count++ : "";
+        if (index == 0 || index > 2500) {
+          console.log(index);
+        }
+        neighbors.push(index);
+      });
+      if (count < 2 || count > 3) {
+        this.aliveList
+          .querySelector(`[data-id='${id}']`)
+          .classList.remove("alive__item--live");
+      }
+    };
+
     liveArr.map((item) => {
       const id = +item.dataset.id;
       //remove first row, last row, left column and right column
@@ -57,7 +73,7 @@ export class ViewAlive {
           id - size + 1,
           id - size - 1,
         ];
-        indexes.map((index) => neighbors.push(index));
+        dieAlive(indexes, id);
 
         //first row
       } else if (id < size && id != 1) {
@@ -71,7 +87,7 @@ export class ViewAlive {
           length - size + id - 1,
           length - size + id + 1,
         ];
-        indexes.map((index) => neighbors.push(index));
+        dieAlive(indexes, id);
 
         //last row
       } else if (id > length - size + 1 && id < length) {
@@ -86,101 +102,113 @@ export class ViewAlive {
           length - id + 1,
           length - id + 1,
         ];
-        indexes.map((index) => neighbors.push(index));
+        dieAlive(indexes, id);
         //left column
-      } else if ((id - 1) % size && id != 1 && id != length - size + 1) {
+      } else if (
+        (id - 1) % size == false &&
+        id != 1 &&
+        id != length - size + 1
+      ) {
         const indexes = [
           id - 1,
           id + 1,
           id - size,
+          id + size,
+          id - size + 1,
+          id + size + 1,
+          id + size - 1,
+          id + size + size - 1,
+        ];
+        dieAlive(indexes, id);
+        // indexes.map((index) => console.log(id + size + size - 1));
+        //right column
+      } else if (id % size == false && id != size && id != length) {
+        const indexes = [
+          id - 1,
+          id + 1,
+          id - size,
+          id + size,
           id - size + 1,
           id - size - 1,
-
-          length - id,
-          length - id + 1,
-          length - id + 1,
+          id + size - 1,
+          id - size - size + 1,
         ];
-        indexes.map((index) => neighbors.push(index));
-        neighbors.push(id - 1);
-        neighbors.push(id + 1);
-        neighbors.push(id - size);
-        neighbors.push(id + size);
-        neighbors.push(id - size + 1);
-        neighbors.push(id + size + 1);
-        neighbors.push(id + size - 1);
-        neighbors.push(id + size + size - 1);
-        //right column
-      } else if (id % size && id != size && id != length) {
-        neighbors.push(id - 1);
-        neighbors.push(id + 1);
-        neighbors.push(id - size);
-        neighbors.push(id + size);
-        neighbors.push(id - size - 1);
-        neighbors.push(id - size + 1);
-        neighbors.push(id + size - 1);
-        neighbors.push(id - size - size + 1);
+        dieAlive(indexes, id);
         //top left
       } else if (id == 1) {
-        neighbors.push(id + 1);
-        neighbors.push(id + size);
-        neighbors.push(id + size + 1);
-        neighbors.push(length - size + 1);
-        neighbors.push(length - size + 2);
-        neighbors.push(length);
-        neighbors.push(size);
-        neighbors.push(size + size);
+        const indexes = [
+          id + 1,
+          id + size,
+          id + size + 1,
+          length - size + 1,
+          length - size + 2,
+          length,
+          size,
+          size + size,
+        ];
+        dieAlive(indexes, id);
+
         //top right
       } else if (id == size) {
-        neighbors.push(size - 1);
-        neighbors.push(size + 1);
-        neighbors.push(size + size);
-        neighbors.push(size + size - 1);
-        neighbors.push(length);
-        neighbors.push(length - size + 1);
-        neighbors.push(length - 1);
-        neighbors.push(1);
+        const indexes = [
+          size - 1,
+          size + 1,
+          size + size,
+          size + size - 1,
+          length,
+          length - size + 1,
+          length - 1,
+          1,
+        ];
+        dieAlive(indexes, id);
+
         //bottom left
       } else if (id == length - size + 1) {
-        neighbors.push(1);
-        neighbors.push(2);
-        neighbors.push(id + 1);
-        neighbors.push(id - 1);
-        neighbors.push(id - size);
-        neighbors.push(id - size + 1);
-        neighbors.push(length - size);
-        neighbors.push(length);
+        const indexes = [
+          1,
+          2,
+          id + 1,
+          id - 1,
+          id - size,
+          id - size + 1,
+          length - size,
+          length,
+        ];
+        dieAlive(indexes, id);
       } else if (id == length) {
-        neighbors.push(id - 1);
-        neighbors.push(id - size);
-        neighbors.push(id - size - 1);
-        neighbors.push(size - 1);
-        neighbors.push(size);
-        neighbors.push(1);
-        neighbors.push(id - size + 1);
-        neighbors.push(id - size - size + 1);
+        const indexes = [
+          id - 1,
+          id - size,
+          id - size - 1,
+          size - 1,
+          size,
+          1,
+          id - size + 1,
+          id - size - size + 1,
+        ];
+        dieAlive(indexes, id);
       }
     });
     const amount = {};
     neighbors
       .sort((a, b) => a - b)
       .map((item) => {
+        if (item == 0 || item > 2500) {
+          console.log(item);
+        }
         if (amount[item] != undefined) {
           ++amount[item];
         } else {
           amount[item] = 1;
         }
-        // console.log(amount);
       });
-    this.clearLiveList();
     Object.entries(amount).map((live) => {
-      console.log(live);
       if (live[1] >= 3 && live[1] < 4) {
         this.aliveList
           .querySelector(`[data-id='${live[0]}']`)
           .classList.add("alive__item--live");
       }
     });
-    // console.log(world);
     const newAmount =
       this.aliveList.querySelectorAll(".alive__item--live").length;
     this.controller.changeAmount(
