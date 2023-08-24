@@ -3,6 +3,11 @@ export class ModelAlive {
   #amount = 0;
   #maxWidth = 500;
   #maxAmount = 1000;
+  #delay = 300;
+
+  getDelay() {
+    return this.#delay;
+  }
 
   getSize() {
     return this.#size;
